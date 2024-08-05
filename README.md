@@ -8,7 +8,7 @@ Python and Selenium: Ensure you have Python installed on your system. You’ll a
 #####
 Chrome WebDriver: Download the appropriate Chrome WebDriver for your system from [here](https://developer.chrome.com/docs/chromedriver/downloads). Make sure to place the WebDriver executable in the same directory as your script.
 Configuration
-Open the dvla_checker.py file in a text editor.
+Open the Simple.py file in a text editor.
 Locate the following lines in the script:
 Python
 
