@@ -15,7 +15,7 @@ Python
 ### -------------------------------------------------------
 ### ########### Change to your information! ##############
 ### -------------------------------------------------------
-### licence_number = "ENTER YOUR LICENCE NUMBER"
+### licence_number = "ENTER YOUR DRIVING  LICENCE NUMBER"
 ### national_insurance = "ENTER YOUR NATIONAL INSURANCE NUMBER"
 ### postcode = "ENTER YOUR POSTCODE"
 ### -------------------------------------------------------
