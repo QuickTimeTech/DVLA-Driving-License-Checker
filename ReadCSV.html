@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Timeline</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .timeline-item {
+            margin: 10px 0;
+        }
+
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: #ffffff;
+        }
+
+        .card-text {
+            color: #cccccc;
+            margin-left: 20px; /* Indent the results */
+        }
+
+        .form-control {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DVLA Timeline</h1>
+        <input type="file" id="csvFileInput" accept=".csv" class="form-control mb-3" />
+        <div id="timeline" class="row"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        document.getElementById('csvFileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                Papa.parse(file, {
+                    header: true,
+                    complete: function(results) {
+                        displayTimeline(results.data);
+                    }
+                });
+            }
+        });
+
+        function displayTimeline(data) {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = ''; // Clear existing timeline
+
+            // Filter and sort data
+            const filteredData = data.filter(item => item.Date && item.Time && item.Result);
+            filteredData.sort((a, b) => new Date(b.Date + ' ' + b.Time) - new Date(a.Date + ' ' + a.Time));
+
+            // Group data by date
+            const groupedData = filteredData.reduce((acc, item) => {
+                if (!acc[item.Date]) {
+                    acc[item.Date] = [];
+                }
+                acc[item.Date].push(item);
+                return acc;
+            }, {});
+
+            // Create timeline items for each date
+            Object.keys(groupedData).forEach(date => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'col-md-12 timeline-item';
+
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                const title = document.createElement('h5');
+                title.className = 'card-title';
+                title.textContent = date;
+
+                cardBody.appendChild(title);
+
+                groupedData[date].forEach(item => {
+                    const description = document.createElement('p');
+                    description.className = 'card-text';
+                    description.textContent = `${item.Time} - ${item.Result}`;
+                    cardBody.appendChild(description);
+                });
+
+                card.appendChild(cardBody);
+                timelineItem.appendChild(card);
+                timeline.appendChild(timelineItem);
+            });
+        }
+    </script>
+</body>
+</html>
